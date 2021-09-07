@@ -20,6 +20,8 @@ Label(root, text="음료를 선택하세요").pack()
 drink_var = StringVar()
 btn_drink1 = Radiobutton(root, text="콜라", value="콜라", variable=drink_var)
 btn_drink2 = Radiobutton(root, text="사이다", value="사이다", variable=drink_var)
+btn_drink1.deselect()
+btn_drink2.deselect()
 btn_drink1.pack()
 btn_drink2.pack()
 

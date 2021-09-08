@@ -54,7 +54,7 @@ save_combobox.current(0)
 option_save = Label(option_frame, text="저장 유형")
 option_save.pack(side="right", padx=5)
 
-download_botton = Button(root, text="Download", bg="orchid")
+download_botton = Button(root, text="Download", bg="coral")
 download_botton.pack(side="right", padx=10, pady=10)
 
 root.resizable(False, False) # 창 크기 변경 불가

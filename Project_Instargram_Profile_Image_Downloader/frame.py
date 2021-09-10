@@ -11,7 +11,7 @@ url_frame.pack()
 
 url_entry = Entry(url_frame, width=70)
 url_entry.pack(padx=5, pady=5, side="left")
-url_entry.insert(0, "URL을 입력해주세요")
+
 
 url_check_button = Button(url_frame, text="ENTER")
 url_check_button.pack(padx=5, pady=5, side="right")

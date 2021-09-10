@@ -20,7 +20,7 @@ url_check_button.pack(padx=5, pady=5, side="right")
 profile_img_frame = LabelFrame(root, text="Image")
 profile_img_frame.pack(pady=20)
 
-profile_img_label = PhotoImage(file="./instagram.png") # 사진 파일을 가장 바깥 폴더에 넣어야 찾을 수 있다고 나온다.
+profile_img_label = PhotoImage(file="screenshottest.png") # 사진 파일을 가장 바깥 폴더에 넣어야 찾을 수 있다고 나온다.
 profile_label = Label(profile_img_frame, image=profile_img_label)
 profile_label.pack(padx=10, pady=10)
 
@@ -56,6 +56,7 @@ option_save.pack(side="right", padx=5)
 
 download_botton = Button(root, text="Download", bg="coral")
 download_botton.pack(side="right", padx=10, pady=10)
+
 
 root.resizable(False, False) # 창 크기 변경 불가
 root.mainloop()

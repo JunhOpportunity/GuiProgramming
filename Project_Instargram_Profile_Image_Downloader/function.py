@@ -5,6 +5,7 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import tkinter.messagebox as msgbox
+from tkinter import filedialog
 import time
 
 # 사진 가져오는 함수
@@ -60,13 +61,36 @@ def change_basic_img():
 # 사진이 맞는지 확인하는 함수 (메세지 박스에서 예:1, 아니오:0)
 def check_img():
     if response == 1:
-        msgbox.showinfo("알림", "저장 경로를 설정해주세요.")
         # 메세지 박스로 저장 경로를 설정하세요.
-        pass
+        msgbox.showinfo("알림", "저장 경로를 설정해주세요.")
+        
     else:
         # 다시 basic 사진으로 변경 + url 입력 칸 초기화
         profile_img_label = PhotoImage(file="./instagram.png")
         profile_label.config(image=profile_img_label)
-        
+        # testImg 삭제해야하는데..
+
+# 저장 경로(folder)
+def browse_dest_path():
+    folder_selected = filedialog.askdirectory()
+    if folder_selected == '':   # 사용자가 취소 누른 경우
+        return
+    url_entry.delete(0, END)
+    url_entry.insert(0, folder_selected)
+
+# download 
+def download():
+    # 파일 목록 확인
+    if len(url_entry.get()) == 0:
+        msgbox.showerror("경고", "Instagram Url을 입력해주세요")
+        return
+    
+    # 저장 경로 확인
+    if len(path_entry.get()) == 0:
+        msgbox.showwarning("경고", "저장 경로를 선택하세요")
+        return
+    
+    # 문제 없을 시 다운로드 실행
+    
 
 

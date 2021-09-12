@@ -9,6 +9,10 @@ from tkinter import filedialog
 import time
 import tkinter.ttk as ttk
 from tkinter import *
+from urllib import request
+from PIL import Image
+import os
+from os import remove
 
 
 response = 0
@@ -42,13 +46,18 @@ def scrap_profile_img():
     img_url = insta["src"]
     print(img_url)
 
-    # 사진 저장하기
-    with urlopen(img_url) as f:
-        with open("testimage.PNG", "wb") as h:
-            img = f.read()
-            h.write(img)
-
+    # 얻은 url로 접속 후 스크린샷
+    browser.get(img_url)
+    browser.get_screenshot_as_file("screenshottest.png")
     browser.close()
+
+    time.sleep(3)
+    
+    # 사진 자르고 저장
+    img_modify = Image.open("screenshottest.png")
+    global cropped_img
+    cropped_img = img_modify.crop((885, 465, 1035, 615))
+    cropped_img.save("testimage.png")
 
 
 ##########################################################################################################
@@ -62,16 +71,19 @@ def change_basic_img():
     profile_label.config(image=change_img)
 
 # 사진이 맞는지 확인하는 함수 (메세지 박스에서 예:1, 아니오:0)
-def check_img():
+def check_img(response):
     if response == 1:
         # 메세지 박스로 저장 경로를 설정하세요.
         msgbox.showinfo("알림", "저장 경로를 설정해주세요.")
         
     else:
         # 다시 basic 사진으로 변경 + url 입력 칸 초기화
+        global profile_img_label
         profile_img_label = PhotoImage(file="./instagram.png")
         profile_label.config(image=profile_img_label)
-        # testImg 삭제해야하는데..
+        url_entry.delete(0, END)
+        remove("screenshottest.png")
+        remove("testimage.png")
 
 # 저장 경로(folder)
 def browse_dest_path():
@@ -106,6 +118,23 @@ def enter_btn_cmd():
         change_basic_img()
         time.sleep(2)
         response = msgbox.askyesno("예 / 아니오", "이 사진이 맞나요?") # response 전역변수로 설정해야하는데..
+        check_img(response)
+
+# 저장 경로(folder)
+def download_path():
+    folder_selected = filedialog.askdirectory()
+    if folder_selected == '':   # 사용자가 취소 누른 경우
+        return
+    path_entry.delete(0, END)
+    path_entry.insert(0, folder_selected)
+
+# download button
+def download_button_click():
+    file_name = "profile_image.{}".format(save_combobox.get())
+    dest_path = os.path.join(path_entry.get(), file_name)
+    cropped_img.save(dest_path)
+    remove("screenshottest.png")
+    remove("testimage.png")
 
 ##########################################################################################################
 
@@ -141,7 +170,7 @@ download_frame.pack(padx=5, pady=5)
 path_entry = Entry(download_frame, width = 70)
 path_entry.pack(padx=5, pady=5, side="left")
 
-path_button = Button(download_frame, text="찾아보기")
+path_button = Button(download_frame, text="찾아보기", command=download_path)
 path_button.pack(padx=5, pady=5, side="right")
 
 # 옵션 설정
@@ -151,20 +180,20 @@ option_frame.pack(side="left")
 # (크기 설정)
 option_size = Label(option_frame, text="크기")
 option_size.pack(side="left", padx=5)
-size_values = ["150(원본)", "300", "450", "600"]
-size_combobox = ttk.Combobox(option_frame, height=0, values=size_values, state="readonly")
+size_values = ["150(원본)"]
+size_combobox = ttk.Combobox(option_frame, height=1, values=size_values, state="readonly")
 size_combobox.pack(side="left", padx=5)
 size_combobox.current(0)
 
 # (저장 유형 설정)
-save_values = ["PNG", "JPG"]
+save_values = ["PNG", "JPG(Error)"]
 save_combobox = ttk.Combobox(option_frame, height=2, values=save_values, state="readonly")
 save_combobox.pack(side="right", padx=5)
 save_combobox.current(0)
 option_save = Label(option_frame, text="저장 유형")
 option_save.pack(side="right", padx=5)
 
-download_botton = Button(root, text="Download", bg="coral")
+download_botton = Button(root, text="Download", bg="coral", command=download_button_click)
 download_botton.pack(side="right", padx=10, pady=10)
 
 
